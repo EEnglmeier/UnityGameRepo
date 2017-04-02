@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<story>
+	<question id="1">
+		<text>You are being chased by X and Y ! Do you want to set sails?</text>
+			 <response triggerId="1">Set sails immediately!</response>
+			 <response triggerId="2">No thanks.</response>
+			 <response triggerId="2">I want to die right now!</response>
+	</question>
+</story>

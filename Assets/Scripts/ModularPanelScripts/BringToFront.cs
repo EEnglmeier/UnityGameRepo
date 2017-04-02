@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BringToFront : MonoBehaviour {
 
-	// Use this for initialization
 	void OnEnable () {
 		transform.SetAsLastSibling ();
 	}

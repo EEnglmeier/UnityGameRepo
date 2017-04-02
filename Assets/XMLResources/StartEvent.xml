@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<startEvent>
+	<question id="0">
+		<text>
+<![CDATA[You are carrying vital information for the survival of the revolution! 
+Do you want to set sails?]]>
+		</text>
+			<response triggerId="1"><text>Set sails immediately!</text></response>
+			<response triggerId="11"><text>No, thanks!</text></response>
+			<response triggerId="11"><text>I want to die right now!</text></response>
+	</question>
+	<question id="1">
+		<text>
+	<![CDATA[A Frigate is blocking your way. Destroy it!]]>
+		</text>
+			<response triggerId="10"><text>OK!</text></response>
+			<response triggerId="11"><text></text></response>
+			<response triggerId="11"><text></text></response>
+	</question>
+</startEvent>

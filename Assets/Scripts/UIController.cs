@@ -12,19 +12,14 @@ public class UIController : MonoBehaviour {
 	private float fireCooldown = 1.0f;
 	private bool cooldown = false;
 
-	private ModularPanel modularPanel;
+	public ModularPanel modularPanel;
 
-
-	// Use this for initialization
-	void Start () {
+	void Awake(){
 		modularPanel = ModularPanel.getInstance ();
-		showStartMessage ();
-		addButtonListeners ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	void Start () {
+		addButtonListeners ();
 	}
 
 	public void addButtonListeners(){
@@ -40,8 +35,8 @@ public class UIController : MonoBehaviour {
 		}
 	}
 
-	private void showStartMessage(){
-		modularPanel.choice ("Do you want to start the game?","Yes, please!", "No!", "I want to die!");
+	public void showMessage(GameEvent gv){
+		modularPanel.choice (gv);
 	}
 
 	public void requestNewMap(string str){

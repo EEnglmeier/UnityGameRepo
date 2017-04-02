@@ -5,7 +5,10 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine;
 
+public enum SelectedChoice {ChoiceOne, ChoiceTwo, ChoiceThree};
+
 public class ModularPanel : MonoBehaviour {
+
 	public Text question;
 	public Image iconImage;
 	public Text choiceOne;
@@ -15,6 +18,33 @@ public class ModularPanel : MonoBehaviour {
 
 	private static ModularPanel modularPanel;
 
+	private GameController GC;
+
+	void Awake(){
+		this.GC = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
+
+		EventTrigger choiceOneTrigger = this.choiceOne.gameObject.GetComponent<EventTrigger> ();
+		EventTrigger.Entry entry = new EventTrigger.Entry ();
+		entry.eventID = EventTriggerType.PointerClick;
+		entry.callback.AddListener ((data) => {  
+			OnPointerClickDelegateChoiceOne ((PointerEventData)data); });
+		choiceOneTrigger.triggers.Add (entry);
+
+		EventTrigger choiceTwoTrigger = this.choiceTwo.gameObject.GetComponent<EventTrigger> ();
+		EventTrigger.Entry entryTwo = new EventTrigger.Entry ();
+		entryTwo.eventID = EventTriggerType.PointerClick;
+		entryTwo.callback.AddListener ((data) => { 
+			OnPointerClickDelegateChoiceTwo ((PointerEventData)data); });
+		choiceTwoTrigger.triggers.Add (entryTwo);
+
+		EventTrigger choiceThreeTrigger = this.choiceThree.gameObject.GetComponent<EventTrigger> ();
+		EventTrigger.Entry entryThree = new EventTrigger.Entry ();
+		entryThree.eventID = EventTriggerType.PointerClick;
+		entryThree.callback.AddListener ((data) => {   
+			OnPointerClickDelegateChoiceThree ((PointerEventData)data); });
+		choiceThreeTrigger.triggers.Add (entryThree);
+	}
+
 	public static ModularPanel getInstance(){
 		if(!modularPanel){
 			modularPanel = FindObjectOfType(typeof (ModularPanel)) as ModularPanel;
@@ -23,106 +53,65 @@ public class ModularPanel : MonoBehaviour {
 		}
 		return modularPanel;
 	}
+		
+	public void choice (GameEvent gameEvent){
 
-	/**
-	 * All strings except for question are allowed to be empty.
-	 */
-	public void choice (string question, string choiceOneString, string choiceTwoString, string choiceThreeString){
-		if (!question.Equals ("")) {
-			modularPanelObject.SetActive (true);
+		if (!gameEvent.getQuestion().Equals ("")) {
+			this.question.text = gameEvent.getQuestion();
+			this.modularPanelObject.SetActive (true);
 		}
 
-		if (choiceOneString.Equals ("")) {
+		if (gameEvent.getChoiceOneText().Equals("")) {
 			this.choiceOne.gameObject.SetActive (false);
+			Debug.LogError("At least one option in Modular Panel must be active");
 		} else {
-			EventTrigger choiceOneTrigger = this.choiceOne.gameObject.GetComponent<EventTrigger> ();
-			EventTrigger.Entry entry = new EventTrigger.Entry ();
-			entry.eventID = EventTriggerType.PointerClick;
-			entry.callback.AddListener ((data) => {
-				OnPointerClickDelegateChoiceOne ((PointerEventData)data); });
-			choiceOneTrigger.triggers.Add (entry);
-
-			addEnterExitTriggers (choiceOneTrigger);
-
 			this.choiceOne.gameObject.SetActive (true);
-			this.choiceOne.text = choiceOneString;
+			this.choiceOne.text = gameEvent.getChoiceOneText();
 		}
-		if (choiceTwoString.Equals ("")) {
+			if (gameEvent.getChoiceTwoText().Equals ("")) {
 			this.choiceTwo.gameObject.SetActive (false);
 		} else {
-
-			EventTrigger choiceTwoTrigger = this.choiceTwo.gameObject.GetComponent<EventTrigger> ();
-			EventTrigger.Entry entry = new EventTrigger.Entry ();
-			entry.eventID = EventTriggerType.PointerClick;
-			entry.callback.AddListener ((data) => {
-				OnPointerClickDelegateChoiceTwo ((PointerEventData)data); });
-			choiceTwoTrigger.triggers.Add (entry);
-
-			addEnterExitTriggers (choiceTwoTrigger);
+			
 
 			this.choiceTwo.gameObject.SetActive (true);
-			this.choiceTwo.text = choiceTwoString;
+				this.choiceTwo.text = gameEvent.getChoiceTwoText();
 		}
-		if (choiceThreeString.Equals ("")) {
+		if (gameEvent.getChoiceThreeText().Equals("")) {
 			this.choiceThree.gameObject.SetActive (false);
 		} else {
 
-			EventTrigger choiceThreeTrigger = this.choiceThree.gameObject.GetComponent<EventTrigger> ();
-			EventTrigger.Entry entry = new EventTrigger.Entry ();
-			entry.eventID = EventTriggerType.PointerClick;
-			entry.callback.AddListener ((data) => {
-				OnPointerClickDelegateChoiceThree ((PointerEventData)data); });
-			choiceThreeTrigger.triggers.Add (entry);
-
-			addEnterExitTriggers (choiceThreeTrigger);
-
 			this.choiceThree.gameObject.SetActive (true);
-			this.choiceThree.text = choiceThreeString;
+			this.choiceThree.text = gameEvent.getChoiceThreeText();
 		}
-
-		this.question.text = question;
+			
 		this.iconImage.gameObject.SetActive (false);
 	}
 
 	public void OnPointerClickDelegateChoiceOne(PointerEventData data){
-
 		closePanel ();
+		GC.triggerResponse (SelectedChoice.ChoiceOne);
+		resetButtonColor ();
 	}
 
 	public void OnPointerClickDelegateChoiceTwo(PointerEventData data){
-
 		closePanel ();
+		GC.triggerResponse (SelectedChoice.ChoiceTwo);
+		resetButtonColor ();
 	}
 
 	public void OnPointerClickDelegateChoiceThree(PointerEventData data){
-
 		closePanel ();
+		GC.triggerResponse (SelectedChoice.ChoiceThree);
+		resetButtonColor ();
 	}
-	//TODO this does not really work	
-	public void OnPointerEnterDelegate(PointerEventData data,EventTrigger trigger){
-		trigger.GetComponent<Text> ().color = Color.gray;
-	}
-	//TODO this does not really work	
-	public void OnPointerExitDelegate(PointerEventData data,EventTrigger trigger){
-		trigger.GetComponent<Text> ().color = Color.white;
-	}
-
-	private void addEnterExitTriggers(EventTrigger parentTrigger){
-		EventTrigger.Entry enterEntry = new EventTrigger.Entry ();
-		enterEntry.eventID = EventTriggerType.Move;
-		enterEntry.callback.AddListener ((data) => {
-			OnPointerEnterDelegate ((PointerEventData)data,parentTrigger); });
-		parentTrigger.triggers.Add (enterEntry);
-
-		EventTrigger.Entry exitEntry = new EventTrigger.Entry ();
-		enterEntry.eventID = EventTriggerType.PointerExit;
-		enterEntry.callback.AddListener ((data) => {
-			OnPointerExitDelegate ((PointerEventData)data,parentTrigger); });
-		parentTrigger.triggers.Add (exitEntry);
-	}
-		
 
 	void closePanel(){
 		modularPanelObject.SetActive (false);
+	}
+
+	void resetButtonColor(){
+		choiceOne.color = Color.white;
+		choiceTwo.color = Color.white;
+		choiceThree.color = Color.white;
 	}
 }

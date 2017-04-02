@@ -25,7 +25,6 @@ public class Ship : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (hullHitPoints <= 0.0f) {
-			Debug.Log ("Dead");
 			GC.SendMessage ("destroyShip", transform.gameObject);
 		}
 

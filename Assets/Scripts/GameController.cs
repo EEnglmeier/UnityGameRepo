@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Sector{Start, Unknown, Pirate, Final};
+public enum Level {One, Two, Three, Four, Five, Six, Seven, Eight};
+
 public class GameController : MonoBehaviour {
 
 	public UIController UIController;
@@ -23,11 +26,66 @@ public class GameController : MonoBehaviour {
 	private bool setSailPhase = false;
 	private bool gamePhase = true;
 
+	private EventProcessor eventProcessor;
+	private Level level = Level.One;
+	private Sector sector = Sector.Start;
+
 	private readonly Vector3 playerPosition = new Vector3 (-7.5f,0.0f,0.0f);
 
 	// Use this for initialization
 	void Start () {
-		instantiateEnemy ();
+		eventProcessor = new EventProcessor ();
+		initializeNewEvent (eventProcessor.getNextEvent(sector,level));
+	}
+	/**
+	* receives the user selected option from the Modular Panel. Always regarding the current GameObject.
+	* Possible outcomes:
+	* 
+	* 10 = SPAWN ENEMEY
+	* 11 = GAMEOVER
+	* 0 = Get next Dialogue with id=0
+	* 1 = Get next Dialogue with id=1
+	* 2 = Get next Dialogue with id=2
+	* 3 = Get next Dialogue with id=3
+	* 4 = ...
+	**/
+	public void triggerResponse(SelectedChoice choice){
+		switch (choice) {
+		case SelectedChoice.ChoiceOne:
+			startNewEvent(eventProcessor.currentGameEvent.getResponseKeyOne ());
+			break;
+		case SelectedChoice.ChoiceTwo:
+			startNewEvent(eventProcessor.currentGameEvent.getResponseKeyTwo ());
+			break;
+		case SelectedChoice.ChoiceThree:
+			startNewEvent(eventProcessor.currentGameEvent.getResponseKeyThree());
+			break;
+		default:
+			Debug.LogError("No possible Choice Selected"); 
+			break;
+		}
+	}
+
+	private void startNewEvent(int choiceFromXML){
+		switch (choiceFromXML) {
+		case 11:
+			gameOver ();
+			break;
+		case 10: 
+			instantiateEnemy ();
+			break;
+		default:
+			initializeNewEvent (eventProcessor.getNextDialogueOption (choiceFromXML));
+			break;
+		}
+	}
+
+	private void gameOver(){
+		Debug.Log ("GAME OVER");
+	}
+
+	public void initializeNewEvent(GameEvent gameEvent){
+		UIController.showMessage (gameEvent);
 	}
 
 	// Update is called once per frame
