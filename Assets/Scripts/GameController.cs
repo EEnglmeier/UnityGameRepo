@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Sector{Start, Unknown, Pirate, Final};
-public enum Level {One, Two, Three, Four, Five, Six, Seven, Eight};
+public enum Sector{Start, Unknown, Pirate, Final, Island, Shop};
+public enum Level {One, Two, Three, Four, Five, Six, Seven, Eight,Nine,Ten};
 
 public class GameController : MonoBehaviour {
 
@@ -152,4 +152,5 @@ public class GameController : MonoBehaviour {
 	private void resetPlayerPosition(){
 		playerShip.transform.position = playerPosition;
 	}
+		
 }
