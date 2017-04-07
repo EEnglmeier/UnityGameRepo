@@ -39,8 +39,8 @@ public class UIController : MonoBehaviour {
 		modularPanel.choice (gv);
 	}
 
-	public void requestNewMap(string str){
-		GC.randomNewMap ();
+	public void requestNewMap(Sector sector){
+		GC.randomNewMap (sector);
 	}
 
 	public void requestSail(){

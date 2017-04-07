@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO better visual for already visited sectors
 public class Marker : MonoBehaviour {
 
 
 	private Vector2 position;
 	private Sector sector;
+	private bool visited = false;
 
-	private GameObject UIController;
+	private UIController UIController;
 
 	string infotext = "";
 
@@ -17,8 +19,12 @@ public class Marker : MonoBehaviour {
 			infotext);
 	}
 
-	void OnMouseEnter(){
-		infotext = sector.ToString ();
+	void OnMouseEnter(){		
+		if (!visited && !sector.Equals(Sector.Start)) {
+			infotext = sector.ToString ();
+		} else {
+			infotext = "Already visited";
+		}
 	}
 
 	void OnMouseExit(){
@@ -26,8 +32,11 @@ public class Marker : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
-		UIController = GameObject.FindGameObjectWithTag ("UIController");
-		UIController.SendMessage ("requestNewMap",gameObject.name);
+		if (!visited && !sector.Equals(Sector.Start)) {
+			UIController = GameObject.FindGameObjectWithTag ("UIController").GetComponent<UIController> ();
+			visited = true;
+			this.UIController.requestNewMap (sector);
+		}
 	}
 
 	public Sector getSector(){
@@ -44,6 +53,5 @@ public class Marker : MonoBehaviour {
 	public void setPosition(Vector2 pos){
 		this.position = pos;
 	}
-
 		
 }

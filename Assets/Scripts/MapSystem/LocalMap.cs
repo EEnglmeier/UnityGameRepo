@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO better algorithm for generation positions and position distribution
 //Local Map provides a map for the current sub sector
 public class LocalMap : IMap {
 

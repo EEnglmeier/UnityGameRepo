@@ -26,34 +26,35 @@ public class MapMaker : MonoBehaviour {
 		if (!generated) {
 			marker = generateSectors (minAmountOfMarkers, maxAmountOfMarkers);
 			generatedMap = new LocalMap (marker, minAmountOfMarkers, maxAmountOfMarkers, minDistBetweenMarkers, maxDistBetweenMarkers);
-			marker = generatedMap.generateMap(-gameObject.GetComponent<Renderer>().bounds.extents.x+xBoarderMargin,
-				gameObject.GetComponent<Renderer>().bounds.extents.x-xBoarderMargin,
-				gameObject.GetComponent<Renderer>().bounds.extents.y-yBoarderMargin,
-				-gameObject.GetComponent<Renderer>().bounds.extents.y+yBoarderMargin);
+			marker = generatedMap.generateMap (-gameObject.GetComponent<Renderer> ().bounds.extents.x + xBoarderMargin,
+				gameObject.GetComponent<Renderer> ().bounds.extents.x - xBoarderMargin,
+				gameObject.GetComponent<Renderer> ().bounds.extents.y - yBoarderMargin,
+				-gameObject.GetComponent<Renderer> ().bounds.extents.y + yBoarderMargin);
 			foreach (ArbitraryMarker m in marker) {
 				switch (m.getSector ()) {
 				case Sector.Unknown:
-					instantiteSector (unknownMarker,m.getPosition(),Sector.Unknown);
+					instantiteSector (unknownMarker, m.getPosition (), Sector.Unknown);
 					break;
 				case Sector.Start:
-					instantiteSector (unknownMarker,m.getPosition(),Sector.Start);
+					instantiteSector (unknownMarker, m.getPosition (), Sector.Start);
 					break;
 				case Sector.Final:
-					instantiteSector (unknownMarker,m.getPosition(),Sector.Final);
+					instantiteSector (unknownMarker, m.getPosition (), Sector.Final);
 					break;
 				case Sector.Pirate:
-					instantiteSector (pirateMarker,m.getPosition(),Sector.Pirate);
+					instantiteSector (pirateMarker, m.getPosition (), Sector.Pirate);
 					break;
 				case Sector.Island:
-					instantiteSector (islandMarker, m.getPosition (),Sector.Island);
+					instantiteSector (islandMarker, m.getPosition (), Sector.Island);
 					break;
 				case Sector.Shop:
-					instantiteSector (shopMarker, m.getPosition (),Sector.Shop);
+					instantiteSector (shopMarker, m.getPosition (), Sector.Shop);
 					break;
 				default:
 					break;
 				}
 			}
+			generated = true;
 		}
 	}
 
@@ -84,5 +85,12 @@ public class MapMaker : MonoBehaviour {
 		}
 		return sec;
 	}
+
+	public void setGenerated(bool gen){
+		this.generated = gen;
+	}
 		
+	public bool getGenerated(){
+		return generated;
+	}
 }

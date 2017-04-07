@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour {
 	public GameObject cannonBallPrefab;
 
 	public GameObject playerShip;
-	private GameObject Map;
+	private GameObject Map = null;
 	private GameObject enemyShip;
 
 	public float playerDamage;
@@ -125,14 +125,19 @@ public class GameController : MonoBehaviour {
 
 	private void showMap(){
 		this.UIController.hideSetSailButton ();
-		Map = Instantiate(mapPrefab, new Vector3(0, 0, 0), transform.rotation);
+		if (!Map || !Map.GetComponent<MapMaker> ().getGenerated()) {
+			Map = Instantiate (mapPrefab, new Vector3 (0, 0, 0), transform.rotation);
+		} else {
+			Map.SetActive(true);
+		}
 	}
 
 	// loads a random new map and new events after defeating an enemy
-	public void randomNewMap(){
+	public void randomNewMap(Sector sector){
+		Debug.Log ("Arrived at " + sector.ToString() + " at Level: "+ level.ToString());
 		resetPlayerPosition ();
 		instantiateEnemy ();
-		Destroy (Map);
+		Map.SetActive(false);
 	}
 
 	public void setSail(){

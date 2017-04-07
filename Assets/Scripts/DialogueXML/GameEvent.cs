@@ -12,8 +12,7 @@ public class GameEvent{
 	private int responseTwoKey = -1;
 	private int responseThreeKey = -1;
 
-	public GameEvent(string question, string choiceOneText, string choiceTwoText, string choiceThreeText
-		,int rkOne, int rkTwo, int rkThree){
+	public GameEvent(string question, string choiceOneText, string choiceTwoText, string choiceThreeText,int rkOne, int rkTwo, int rkThree){
 		this.question = question;
 		this.choiceOneText = choiceOneText;
 		this.choiceTwoText = choiceTwoText;
